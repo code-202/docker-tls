@@ -1,0 +1,3 @@
+.env
+docker-ca
+*.pem
