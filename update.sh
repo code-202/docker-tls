@@ -10,6 +10,7 @@ if [ "$PUBLIC_DNS" = "" ]; then
     exit 0;
 fi
 
+mkdir certs
 mkdir docker-ca
 chmod 0700 docker-ca/
 cd docker-ca/
@@ -47,4 +48,4 @@ chmod -v 0400 *-key.pem
 chmod -v 0444 ca.pem *-cert.pem
 
 # Moving
-sudo cp {ca,server-*}.pem ..
+sudo cp {ca,server-*}.pem certs/..

@@ -7,6 +7,7 @@
 	cp daemon.json $@
 
 install: .env /etc/docker/daemon.json ## Install
+	echo "Edit .env !"
 
 update: .env ## Create new certs files
 	./update.sh
