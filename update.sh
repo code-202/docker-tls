@@ -10,7 +10,6 @@ if [ "$PUBLIC_DNS" = "" ]; then
     exit 0;
 fi
 
-mkdir certs
 mkdir docker-ca
 chmod 0700 docker-ca/
 cd docker-ca/
@@ -30,22 +29,19 @@ echo subjectAltName = DNS:${PUBLIC_DNS} >> extfile.cnf
 # Server certificate
 openssl x509 -req -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out server-cert.pem -extfile extfile.cnf
 
-rm -v server.csr
+rm -v server.csr extfile.cnf
 
 # Client key
 openssl genrsa -out key.pem 4096
 # Client CSR
 openssl req -subj '/CN=client' -new -key key.pem -out client.csr
 # clientAuth
-echo extendedKeyUsage = clientAuth > extfile.cnf
+echo extendedKeyUsage = clientAuth > extfile-client.cnf
 # Client certificate
-openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile.cnf
+openssl x509 -req -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile-client.cnf
 
-rm -v client.csr
+rm -v client.csr extfile-client.cnf
 
 # Securing
-chmod -v 0400 *-key.pem
-chmod -v 0444 ca.pem *-cert.pem
-
-# Moving
-sudo cp {ca,server-*}.pem certs/..
+chmod -v 0400 *-key.pem key.pem
+chmod -v 0444 ca.pem *-cert.pem cert.pem
