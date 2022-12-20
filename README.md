@@ -13,3 +13,5 @@ By
 ExecStart=/usr/bin/dockerd --containerd=/run/containerd/containerd.sock
 ```
 in `/lib/systemd/system/docker.service`
+
+Run `systemctl daemon-reload` after that change.
